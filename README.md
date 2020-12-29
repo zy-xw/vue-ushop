@@ -1,21 +1,48 @@
-# xusys
+## 1、菜单管理
 
-> A Vue.js project
+ok
 
-## Build Setup
+## 2、角色管理
 
-``` bash
-# install dependencies
-npm install
+ok
 
-# serve with hot reload at localhost:8080
-npm run dev
+## 3、管理员管理
 
-# build for production with minification
-npm run build
+ok
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
+## 4、商品分类
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+ok
+
+## 5、商品规格
+
+ok
+
+## 6、商品管理
+
+ok
+
+## 7、会员管理
+
+编辑密码验证有问题
+
+## 8、轮播图管理
+
+多图上传有问题
+
+## 9、秒杀活动
+
+未完成
+
+## 10、权限
+
+部分完成
+
+
+
+
+
+
+
+
+

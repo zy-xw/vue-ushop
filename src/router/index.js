@@ -3,6 +3,16 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+import store from "../store"
+
+// function checkEnter(path,next){
+//   if(store.state.userInfo.menus_url.includes(path)){
+//     next()
+//   }else{
+//     next("/")
+//   }
+// }
+
 export let indexRoutes=[
   {
     path:"menu",
@@ -51,7 +61,7 @@ export let indexRoutes=[
   },
 ]
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path:"/login",
@@ -72,3 +82,24 @@ export default new Router({
     },
   ]
 })
+
+// //登录拦截
+// router.beforeEach((to,from,next)=>{
+//   //如果是去登录 next
+//   if(to.path==="/login"){
+//     next()
+//     return
+//   }
+//   //如果不是登录，判断是否已经登录，登录了就next
+//   if(store.state.userInfo.id){
+//     next()
+//     return;
+//   }
+//   //否则就去登录页面
+//   next("/login")
+// })
+
+
+
+
+export default router

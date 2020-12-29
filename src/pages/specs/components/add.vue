@@ -98,6 +98,7 @@ export default {
   methods: {
     ...mapActions({
       reqList: "specs/reqList",
+      reqTotal: "specs/reqTotal"
     }),
     cancel() {
       if (!this.info.isadd) {
@@ -106,12 +107,12 @@ export default {
       this.info.isshow = false;
     },
     empty() {
-      (this.user = {
-        spescname: "",
-        attrs: "",
-        status: 1,
-      }),
-        (this.attrsArr = [{ value: "" }]);
+      this.user = {
+        specsname: "",
+        attrs: "[]",
+        status: 1
+      };
+      this.attrsArr = [{ value: "" }];
     },
     //新增属性
     addAttr() {
@@ -130,6 +131,7 @@ export default {
           this.empty();
           successalert(res.data.msg);
           this.reqList();
+          this.reqTotal();
         }
       });
     },

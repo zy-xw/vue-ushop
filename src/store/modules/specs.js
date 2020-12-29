@@ -40,16 +40,13 @@ let actions = {
   reqList(context, bool) {
     //商品规格是要分页的，商品管理，是不要分页的。所以多给一个参数，bool.
     //bool是true,就要全部；否则，就做分页
-    let params = bool ? {} : {
-      page: context.state.page,
-      size: context.state.size
-    }
+    let params=bool?{}:{page:context.state.page,size:context.state.size}
     //发请求
     reqspecslist(params).then(res => {
       if (res.data.code) {
         //删除的是最后一页的最后一条
         if (res.data.list.length === 0 && context.state.page > 1) {
-          context.commit("changePage", context.state.page - 1)
+          context.commit("changePage", context.state.page-1)
           context.dispatch("reqList")
           return;
         }

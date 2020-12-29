@@ -2,6 +2,9 @@ import axios from "axios"
 import qs from "qs"
 import Vue from "vue"
 import { erroralert } from "./alert"
+import store from "../store"
+import router from "../router"
+import { data } from "autoprefixer"
 
 //开发环境使用8080
 let baseUrl="/api"
@@ -10,6 +13,17 @@ Vue.prototype.$pre="http://localhost:3000"
 //生产环境使用 打包
 // let baseUrl=""
 // Vue.prototype.$pre=""
+
+
+//请求拦截:设置请求头
+// axios.interceptors.request.use(config=>{
+//     if(config.url!==baseUrl+"/api/userlogin"){
+//         config.headers.authorization=store.state.userInfo.token
+//     }
+//     return config
+// })
+
+
 
 //响应拦截
 axios.interceptors.response.use(res=>{
@@ -220,7 +234,7 @@ export let reqCateAdd=(user)=>{
 }
 
 //获取商品分类列表
-export let reqCateList=(p)=>{
+export let reqcatelist=(p)=>{
     return axios({
         url:baseUrl+"/api/catelist",
         params:p
@@ -437,5 +451,56 @@ export let reqgoodsDel = (user) => {
 export let reqgoodsCount=()=>{
     return axios({
         url:baseUrl+"/api/goodscount"
+    })
+}
+
+
+
+//--------------------限时秒杀--------------------
+
+
+//限时秒杀添加
+export let reqseckillAdd = (user)=>{
+    return axios({
+        url:baseUrl+"/api/seckadd",
+        method:"post",
+        data:qs.stringify(user)
+    })
+}
+
+//限时秒杀列表
+export let reqseckillList = (p)=>{
+    return axios({
+        url:baseUrl+"/api/secklist",
+        params:p
+    })
+}
+
+//限时秒杀获取一条
+export let reqseckillInfo = (id) =>{
+    return axios({
+        url:baseUrl+"/api/seckinfo",
+        method:"get",
+        params:id
+    })
+}
+
+//限时秒杀修改
+
+export let reqseckEdit = (user) =>{
+    return axios({
+        url:baseUrl+"/api/seckedit",
+        method:"post",
+        data:qs.stringify(user)
+    })
+}
+
+//限时秒杀删除
+
+export let reqseckillDel = (user) =>{
+    return axios({
+        url:baseUrl+"/api/seckdelete",
+        method:"post",
+        data:qs.stringify(user)
     })
 }

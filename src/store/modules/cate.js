@@ -1,4 +1,4 @@
-import { reqCateList } from "../../utils/http"
+import { reqcatelist } from "../../utils/http"
 //搭架子
 let state={
     //初始值
@@ -21,7 +21,7 @@ let actions={
     //处理list的逻辑
     reqList(context){
         //发请求 
-        reqCateList({istree:true}).then(res=>{
+        reqcatelist({istree:true}).then(res=>{
             if(res.data.code===200){
                 context.commit("changeList",res.data.list)
             }

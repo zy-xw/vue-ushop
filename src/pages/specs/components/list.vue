@@ -24,7 +24,9 @@
           <el-button type="primary" v-if="scope.row.status === 1"
             >启用</el-button
           >
-          <el-button type="info" v-else>启用</el-button>
+          <el-button type="info" v-else>
+            禁用
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column label="操作" sortable width="250">
@@ -36,7 +38,7 @@
     </el-table>
 
     <!-- 分页 -->
-    <el-pagination background layout="prev, pager, next" 
+    <el-pagination  layout="prev, pager, next" 
     :total="total"
     :page-size="size"
     @current-change="changePage"
@@ -53,12 +55,13 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters({
+   ...mapGetters({
       list: "specs/list",
+      //总数
       total: "specs/total",
       //一页的数量
       size: "specs/size",
-    }),
+    })
   },
   methods: {
     ...mapActions({

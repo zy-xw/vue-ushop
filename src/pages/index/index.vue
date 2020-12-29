@@ -49,7 +49,10 @@
         </div>
       </el-aside>
       <el-container>
-        <el-header>Header</el-header>
+        <el-header>
+          <!-- <span>{{userInfo.username}}</span>
+          <el-button type="danger" @click="logout">退出登录</el-button> -->
+        </el-header>
         <el-main>
           <!-- 面包屑 -->
           <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -65,14 +68,23 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
-  data() {
-    return {};
+  computed:{
+    ...mapGetters({
+      userInfo:"userInfo"
+    })
   },
-  //生命周期 - 创建完成（访问当前this实例）
-  created() {},
-  //生命周期 - 挂载完成（访问DOM元素）
-  mounted() {},
+  // methods:{
+  //   ...mapActions({
+  //     changeUser:"changeUser"
+  //   }),
+    //退出登录
+    // logout(){
+    //   this.changeUser({}),
+    //   this.$router.replace("/login")
+    // }
+  // }
 };
 </script>
 <style scoped>
