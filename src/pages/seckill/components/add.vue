@@ -14,7 +14,6 @@
           <el-date-picker
             v-model="value1"
             type="daterange"
-            :value-format="yyyy-MM-dd-hh-mm-ss"
             range-separator="至"
             start-placeholder="开始日期"
             start=""
@@ -104,44 +103,12 @@ export default {
   props: ["info"],
   data() {
     return {
-      pickerOptions: {
-        shortcuts: [
-          {
-            text: "最近一周",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "最近一个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-          {
-            text: "最近三个月",
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit("pick", [start, end]);
-            },
-          },
-        ],
-      },
-      value1: "",
+      value1: [],
 
-      num: "",
       user: {
         title: "",
-        begintime: 0,
-        endtime: 0,
+        begintime: "",
+        endtime: "",
         //n
         first_cateid: "",
         //n
@@ -149,10 +116,10 @@ export default {
         //n
         goodsid: "",
         status: 1,
-      },  
+      },
       secondCateList: [],
       showSpecsAttr: [],
-      goodsidlist: "",
+      goodsidlist: [],
       value: true,
       //路由集合
       indexRoutes,
@@ -171,10 +138,12 @@ export default {
       reqList: "seckill/reqList",
     }),
     beginend() {
-      let date=new Date(this.value1[0])
-      this.user.begintime=Date.parse(date)
-      let date2=new Date(this.value1[1])
-      this.user.endtime=Date.parse(date2)
+      // let date=new Date(this.value1[0])
+      // this.user.begintime=Date.parse(date)
+      // let date2=new Date(this.value1[1])
+      // this.user.endtime=Date.parse(date2)
+      this.user.begintime = this.value1[0].getTime();
+      this.user.endtime = this.value1[1].getTime;
     },
     changeFirstCateId() {
       this.user.second_cateid = "";
@@ -210,8 +179,8 @@ export default {
     empty() {
       this.user = {
         title: "",
-        begintime: 0,
-        endtime: 0,
+        begintime: "",
+        endtime: "",
         //n
         first_cateid: "",
         //n
@@ -220,38 +189,42 @@ export default {
         goodsid: "",
         status: 1,
       };
-      this.value1=""
+      this.value1 = [];
     },
     add() {
-      reqseckillAdd(this.user).then(res => {
+      this.user.begintime = this.value1[0].getTime();
+      this.user.endtime = this.value1[1].getTime();
+      reqseckillAdd(this.user).then((res) => {
         if (res.data.code == 200) {
           successalert(res.data.msg);
-            console.log(res)
+          console.log(res);
+          this.cancel();
+          this.empty();
+          this.reqList();
         }
-        this.cancel();
-        this.empty();
-        this.reqList();
       });
     },
     getOne(id) {
-
-
-
       reqseckillInfo({ id: id }).then((res) => {
         if (res.data.code === 200) {
           this.user = res.data.list;
           this.user.id = id;
-          console.log(res);
+          this.getSecondList();
+          this.getgoodsList();
+          this.$set(this.value1, 0, new Date(Number(this.user.begintime)));
+          this.$set(this.value1, 1, new Date(Number(this.user.endtime)));
         }
       });
     },
     update() {
+      this.user.begintime = this.value1[0].getTime();
+      this.user.endtime = this.value1[1].getTime();
       reqseckEdit(this.user).then((res) => {
         if (res.data.code == 200) {
+          successalert(res.data.msg);
           this.cancel();
-            this.empty();
-            successalert(res.data.msg);
-            this.reqList();
+          this.empty();
+          this.reqList();
         }
       });
     },
