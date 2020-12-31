@@ -8,38 +8,42 @@
         <el-form-item label="活动名称" label-width="100px">
           <el-input v-model="user.title" autocomplete="off"></el-input>
         </el-form-item>
-
+        {{ user }}
+        <!-- {{value1}} -->
         <el-form-item label="活动期限" label-width="120px">
           <el-date-picker
             v-model="value1"
             type="daterange"
+            :value-format="yyyy-MM-dd-hh-mm-ss"
             range-separator="至"
             start-placeholder="开始日期"
+            start=""
             end-placeholder="结束日期"
-            @change="change"
+            end=""
+            @change="beginend"
           >
           </el-date-picker>
         </el-form-item>
         <el-form-item label="一级分类" label-width="100px">
-          <el-select v-model="user.first_cateid">
+          <el-select v-model="user.first_cateid" @change="changeFirstCateId">
             <el-option label="--请选择--" value="" disabled></el-option>
             <!-- 5.遍历数据 -->
             <el-option
-              v-for="item in num"
+              v-for="item in cateList"
               :key="item.id"
-              :label="item.rolename"
+              :label="item.catename"
               :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="二级分类" label-width="100px">
-          <el-select v-model="user.second_cateid" @change="changeFirstCateId">
+          <el-select v-model="user.second_cateid" @change="changeSecondCateId">
             <el-option label="--请选择--" value="" disabled></el-option>
             <!-- 5.遍历数据 -->
             <el-option
-              v-for="item in num"
+              v-for="item in secondCateList"
               :key="item.id"
-              :label="item.rolename"
+              :label="item.catename"
               :value="item.id"
             ></el-option>
           </el-select>
@@ -49,9 +53,9 @@
             <el-option label="--请选择--" value="" disabled></el-option>
             <!-- 5.遍历数据 -->
             <el-option
-              v-for="item in num"
+              v-for="item in goodsidlist"
               :key="item.id"
-              :label="item.rolename"
+              :label="item.goodsname"
               :value="item.id"
             ></el-option>
           </el-select>
@@ -69,7 +73,7 @@
       {{ user }}
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="add()" v-if="info.isadd"
+        <el-button type="primary" @click="add" v-if="info.isadd"
           >添 加</el-button
         >
         <el-button type="primary" @click="update" v-else>修 改</el-button>
@@ -86,16 +90,18 @@ import { indexRoutes } from "../../../router/index";
 import { mapActions, mapGetters } from "vuex";
 
 import {
-    reqseckillAdd,
+  reqseckillAdd,
   reqMenuList,
-  reqRoleGet,
-  reqRoleUpdate,
+  reqseckillInfo,
+  reqseckEdit,
+  reqcatelist,
+  reqgoodslist,
 } from "../../../utils/http";
 
 import { successalert } from "../../../utils/alert";
 
 export default {
-  props: ["info", "list"],
+  props: ["info"],
   data() {
     return {
       pickerOptions: {
@@ -130,25 +136,70 @@ export default {
         ],
       },
       value1: "",
-      value2: "",
 
       num: "",
       user: {
-        title:"",
-        begintime:"",
-        endtime:"",
-        first_cateid:"",
-        second_cateid:"",
-        goodsid:"",
-        status:1,
-      },
-
+        title: "",
+        begintime: 0,
+        endtime: 0,
+        //n
+        first_cateid: "",
+        //n
+        second_cateid: "",
+        //n
+        goodsid: "",
+        status: 1,
+      },  
+      secondCateList: [],
+      showSpecsAttr: [],
+      goodsidlist: "",
       value: true,
       //路由集合
       indexRoutes,
     };
   },
+  computed: {
+    ...mapGetters({
+      cateList: "cate/list",
+      specsList: "specs/list",
+    }),
+  },
   methods: {
+    ...mapActions({
+      reqCateList: "cate/reqList",
+      reqSpecsList: "specs/reqList",
+      reqList: "seckill/reqList",
+    }),
+    beginend() {
+      let date=new Date(this.value1[0])
+      this.user.begintime=Date.parse(date)
+      let date2=new Date(this.value1[1])
+      this.user.endtime=Date.parse(date2)
+    },
+    changeFirstCateId() {
+      this.user.second_cateid = "";
+      this.getSecondList();
+    },
+    getSecondList() {
+      reqcatelist({ pid: this.user.first_cateid }).then((res) => {
+        this.secondCateList = res.data.list;
+      });
+    },
+    changeSecondCateId() {
+      this.user.goodsid = "";
+      this.getgoodsList();
+    },
+    // id:this.user.second_cateid
+    getgoodsList() {
+      reqgoodslist({
+        fid: this.user.first_cateid,
+        sid: this.user.second_cateid,
+      }).then((res) => {
+        console.log("111");
+        console.log(res);
+        this.goodsidlist = res.data.list;
+      });
+    },
     cancel() {
       if (!this.info.isadd) {
         this.empty();
@@ -158,24 +209,35 @@ export default {
     //清空
     empty() {
       this.user = {
-        rolename: "",
-        menus: "",
+        title: "",
+        begintime: 0,
+        endtime: 0,
+        //n
+        first_cateid: "",
+        //n
+        second_cateid: "",
+        //n
+        goodsid: "",
         status: 1,
       };
+      this.value1=""
     },
     add() {
-      reqseckillAdd(this.user).then((res) => {
+      reqseckillAdd(this.user).then(res => {
         if (res.data.code == 200) {
           successalert(res.data.msg);
-        //   console.log(res)
+            console.log(res)
         }
         this.cancel();
         this.empty();
-        this.$emit("init");
+        this.reqList();
       });
     },
     getOne(id) {
-      reqRoleGet({ id: id }).then((res) => {
+
+
+
+      reqseckillInfo({ id: id }).then((res) => {
         if (res.data.code === 200) {
           this.user = res.data.list;
           this.user.id = id;
@@ -184,24 +246,21 @@ export default {
       });
     },
     update() {
-      reqRoleUpdate(this.user).then((res) => {
+      reqseckEdit(this.user).then((res) => {
         if (res.data.code == 200) {
-          successalert(res.data.msg);
           this.cancel();
-          this.empty();
-          this.$emit("init");
+            this.empty();
+            successalert(res.data.msg);
+            this.reqList();
         }
       });
     },
   },
-  //生命周期 - 创建完成（访问当前this实例）
-  created() {},
-  //生命周期 - 挂载完成（访问DOM元素）
   mounted() {
-    reqMenuList().then((res) => {
-      // console.log(res);
-      this.num = res.data.list;
-    });
+    if (this.cateList.length === 0) {
+      this.reqCateList();
+    }
+    this.reqSpecsList(true);
   },
 };
 </script>

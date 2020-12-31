@@ -1,6 +1,7 @@
 <!--  -->
 <template>
   <div class="login">
+    <div class="con">
       <h2>登录</h2>
       <el-form :model="user" :rules="rules">
         <el-form-item prop="username">
@@ -14,7 +15,7 @@
           <el-button type="primary" @click="login">登录</el-button>
         </div>
       </el-form>
-  </div>
+  </div></div>
 </template>
 
 <script>
@@ -28,16 +29,16 @@ export default {
             password:""
         },
         //规则
-        // rules:{
-        //   username: [
-        //   { required: true, message: "请输入账号", trigger: "blur" },
-        //   { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
-        // ],
-        // password: [
-        //   { required: true, message: "请输入密码", trigger: "blur" },
-        //   { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
-        // ]
-        // }
+        rules:{
+          username: [
+          { required: true, message: "请输入账号", trigger: "blur" },
+          { min: 3, max: 10, message: "长度在 3 到 10 个字符", trigger: "blur" }
+        ],
+        password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 2, max: 5, message: "长度在 2 到 5 个字符", trigger: "blur" }
+        ]
+        }
     };
   },
   methods:{
@@ -45,16 +46,16 @@ export default {
       changeUser:"changeUser"
     }),
     //登录
-    // login(){
-    //   reqLogin(this.user).then(res=>{
-    //     if(res.data.code===200){
-    //       //如果登录成功了，将用户的信息存入store
-    //       this.changeUser(res.data.list)
-    //       //跳转页面
-    //       this.$router.push("/");
-    //     }
-    //   })
-    // }
+    login(){
+      reqLogin(this.user).then(res=>{
+        if(res.data.code===200){
+          //如果登录成功了，将用户的信息存入store
+          this.changeUser(res.data.list)
+          //跳转页面
+          this.$router.push("/");
+        }
+      })
+    }
   }
 };
 </script>

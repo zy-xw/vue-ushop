@@ -3,9 +3,9 @@
   <div>
     <el-button type="primary" @click="willAdd">添加</el-button>
 
-    <v-list :list="list" @init="init" @edit="edit($event)"></v-list>
+    <v-list :list="list" @edit="edit($event)"></v-list>
 
-    <v-add :info="info" @init="init" :list="list" ref="add"></v-add>
+    <v-add :info="info" :list="list" ref="add"></v-add>
   </div>
 </template>
 
@@ -15,8 +15,6 @@ import vAdd from "./components/add";
 import vList from "./components/list";
 
 import { mapActions, mapGetters } from "vuex";
-
-import { reqRoleList } from "../../utils/http";
 
 export default {
   components: {
@@ -28,39 +26,30 @@ export default {
       //弹框状态
       info: {
         isshow: false,
-        isadd:true
+        isadd: true,
       },
-      list: [],
     };
   },
-    computed: {
+  computed: {
     ...mapGetters({
-      list: "cate/list"
-    })
+      list: "cate/list",
+    }),
   },
   methods: {
-         ...mapActions({
+     ...mapActions({
       reqList: "cate/reqList"
     }),
     willAdd() {
       this.info.isshow = true;
-      this.info.isadd = true
+      this.info.isadd = true;
     },
-    init(){
-      reqRoleList().then(res=>{
-      console.log(res)
-      this.list=res.data.list
-    })
+    edit(id) {
+      this.info.isshow = true;
+      this.$refs.add.getOne(id);
+      this.info.isadd = false;
     },
-    edit(id){
-      this.info.isshow=true
-      this.$refs.add.getOne(id)
-      this.info.isadd=false
-    }
   },
-  mounted() {
-    this.init()
-  },
+  mounted() {},
 };
 </script>
 <style scoped>

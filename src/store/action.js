@@ -1,5 +1,5 @@
-// export let actions={
-//     changeUser(context,obj){
-//         context.commit("changeUserInfo",obj)
-//     }
-// }
+export let actions={
+    changeUser(context,obj){
+        context.commit("changeUserInfo",obj)
+    }
+}

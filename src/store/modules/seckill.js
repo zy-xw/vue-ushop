@@ -1,4 +1,4 @@
-// import {  }
+import { reqseckillList } from "../../utils/http"
 
 let state={
     list:[],
@@ -23,4 +23,8 @@ let actions={
             }
         })
     }
+}
+export default {
+    state,mutations,getters,actions,
+    namespaced:true
 }

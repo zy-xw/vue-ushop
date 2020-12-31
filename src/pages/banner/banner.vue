@@ -3,9 +3,9 @@
   <div>
     <el-button type="primary" @click="willAdd">添加</el-button>
 
-    <v-list :list="list" @init="init" @edit="edit($event)"></v-list>
+    <v-list   @edit="edit($event)"></v-list>
 
-    <v-add :info="info" @init="init" :list="list" ref="add"></v-add>
+    <v-add :info="info"  :list="list" ref="add"></v-add>
   </div>
 </template>
 
@@ -36,20 +36,11 @@ export default {
       this.info.isshow = true;
       this.info.isadd = true
     },
-    init(){
-      reqBannerList().then(res=>{
-      console.log(res)
-      this.list=res.data.list
-    })
-    },
     edit(id){
       this.info.isshow=true
       this.$refs.add.getOne(id)
       this.info.isadd=false
     }
-  },
-  mounted() {
-    this.init()
   },
 };
 </script>

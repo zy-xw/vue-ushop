@@ -135,7 +135,7 @@ export default {
         }
         this.cancel();
         this.empty();
-        this.$emit("init");
+        this.reqList();
       });
     },
 
@@ -155,7 +155,7 @@ export default {
           successalert(res.data.msg);
           this.cancel();
           this.empty();
-          this.$emit("init");
+          this.reqList();
         }
       });
     },

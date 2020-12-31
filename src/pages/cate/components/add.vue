@@ -47,7 +47,7 @@
 
 <script>
 import axios from "axios";
-
+import path from "path"
 import { indexRoutes } from "../../../router/index";
 
 import {

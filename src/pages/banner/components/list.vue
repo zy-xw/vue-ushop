@@ -40,22 +40,27 @@
 <script>
 import { successalert } from '../../../utils/alert';
 import { reqBannerDel } from "../../../utils/http";
+import { mapActions, mapGetters } from "vuex"
 export default {
-  props: ["list"],
+  // props: ["list"],
   data() {
     return {};
   },
-  //生命周期 - 创建完成（访问当前this实例）
-  created() {},
-  //生命周期 - 挂载完成（访问DOM元素）
-  mounted() {},
+ computed:{
+   ...mapGetters({
+     list:"banner/list"
+   })
+ },
   methods: {
+    ...mapActions({
+      reqList:"banner/reqList"
+    }),
     del(id) {
           reqBannerDel({ id: id }).then((res) => {
             console.log(res);
             if(res.data.code==200){
             successalert(res.data.msg)
-            this.$emit("init")
+            this.reqList();
             }
         })
     },
@@ -63,6 +68,9 @@ export default {
       this.$emit("edit",id)
     }
   },
+  mounted(){
+    this.reqList();
+  }
 };
 </script>
 <style scoped>

@@ -9,7 +9,7 @@ import cate from "./modules/cate"
 import banner from "./modules/banner"
 import specs from "./modules/specs"
 import goods from './modules/goods'
-
+import seckill from "./modules/seckill"
 export default new Vuex.Store({
     state,
     getters,
@@ -19,6 +19,7 @@ export default new Vuex.Store({
         cate,
         banner,
         specs,
-        goods
+        goods,
+        seckill
     }
 })

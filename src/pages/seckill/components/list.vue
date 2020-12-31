@@ -9,7 +9,7 @@
       default-expand-all
       :tree-props="{ children: 'children' }"
     >
-      <el-table-column prop="id" label="活动名称" sortable width="315">
+      <el-table-column prop="title" label="活动名称" sortable width="315">
       </el-table-column>
     
       <el-table-column prop="name" label="状态" sortable width="315">
@@ -32,23 +32,28 @@
 
 <script>
 import { successalert } from '../../../utils/alert';
-import { reqRoleDel } from "../../../utils/http";
+import { reqseckillDel } from "../../../utils/http";
+import { mapActions, mapGetters } from "vuex";
 export default {
-  props: ["list"],
   data() {
     return {};
   },
-  //生命周期 - 创建完成（访问当前this实例）
-  created() {},
-  //生命周期 - 挂载完成（访问DOM元素）
-  mounted() {},
+  
+  computed:{
+    ...mapGetters({
+      list:"seckill/list"
+    })
+  },
   methods: {
+           ...mapActions({
+      reqList: "seckill/reqList"
+    }),
     del(id) {
-          reqRoleDel({ id: id }).then((res) => {
+          reqseckillDel({ id: id }).then((res) => {
             console.log(res);
             if(res.data.code==200){
             successalert(res.data.msg)
-            this.$emit("init")
+            this.reqList();
             }
         })
     },
@@ -56,6 +61,9 @@ export default {
       this.$emit("edit",id)
     }
   },
+  mounted(){
+    this.reqList();
+  }
 };
 </script>
 <style scoped>

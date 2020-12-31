@@ -128,6 +128,11 @@ export default {
       reqRoleUpdate(this.user).then((res) => {
         if (res.data.code == 200) {
           successalert(res.data.msg);
+           if (this.user.id == this.userInfo.roleid) {
+            this.changeUser({});
+            this.$router.push("/login");
+            return;
+          }
           this.cancel();
           this.empty();
           this.$emit("init");

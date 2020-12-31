@@ -75,16 +75,16 @@ export default {
       userInfo:"userInfo"
     })
   },
-  // methods:{
-  //   ...mapActions({
-  //     changeUser:"changeUser"
-  //   }),
-    //退出登录
-    // logout(){
-    //   this.changeUser({}),
-    //   this.$router.replace("/login")
-    // }
-  // }
+  methods:{
+    ...mapActions({
+      changeUser:"changeUser"
+    }),
+    // 退出登录
+    logout(){
+      this.changeUser({}),
+      this.$router.replace("/login")
+    }
+  }
 };
 </script>
 <style scoped>
